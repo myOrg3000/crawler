@@ -1,0 +1,69 @@
+run:
+  concurrency: 8
+  issues-exit-code: 1
+  tests: true
+
+linters-settings:
+  revive:
+    severity: error
+    confidence: 0.1
+    rules:
+      - name: comment-spacings
+        severity: warning
+        disabled: false
+        exclude: [ "" ]
+        arguments:
+          - mypragma
+          - otherpragma
+      - name: comments-density
+        severity: warning
+        disabled: false
+        exclude: [ "" ]
+        arguments: [ 43 ]
+      - name: exported
+        arguments:
+          - checkPrivateReceivers
+  depguard:
+    rules:
+      main:
+        list-mode: original
+        files:
+          - $all
+        allow:
+          - context
+          - sync
+          - atomic
+          - crawler/internal/fs
+          - crawler/internal/workerpool
+          - encoding/json
+          - errors
+          - log
+          - fmt
+          - io
+          - fs
+          - os
+          - path/filepath
+          - sync
+        deny:
+          - pkg: sync/atomic
+            desc: not allowed
+
+linters:
+  enable:
+    - depguard
+    - revive
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+
+issues:
+  exclude-files:
+    - crawler_test.go
+    - pool_test.go
+    - app.go
+    - buffered_channels_test.go
+  exclude-use-default: true
+  max-issues-per-linter: 0
